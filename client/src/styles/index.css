@@ -1,0 +1,186 @@
+@import 'tailwindcss';
+
+/* Self-hosted so the UI does not depend on Google's CDN and has no layout shift. */
+@import '@fontsource/fraunces/400.css';
+@import '@fontsource/fraunces/600.css';
+@import '@fontsource/fraunces/700.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/* ---------------------------------------------------------------------------
+   Design tokens — an editorial campus notice board.
+   Paper ground, ink type, one brick-red accent. Borders instead of shadows,
+   two radii only, no gradients. If something needs a third radius or a glow,
+   the layout is wrong, not the token set.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-paper: #f6f3ee;
+  --color-surface: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-muted: #6b6660;
+  --color-brick: #b8432f;
+  --color-brick-dark: #93341f;
+  --color-forest: #2f5d50;
+  --color-mustard: #c9962b;
+  --color-line: rgba(26, 26, 26, 0.12);
+  --color-line-strong: rgba(26, 26, 26, 0.28);
+  --color-wash: rgba(26, 26, 26, 0.04);
+
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Only two radii exist. The scale is deliberately truncated. */
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
+
+  --text-kicker: 0.6875rem;
+  --text-kicker--line-height: 0.875rem;
+  --text-kicker--letter-spacing: 0.12em;
+  --text-kicker--font-weight: 600;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* Visible focus is not optional: keyboard users need to see where they are. */
+  :focus-visible {
+    outline: 2px solid var(--color-brick);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Numbers, dates, IDs and seat counts are always mono — they line up in columns. */
+  [data-numeric] {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--color-brick);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-kicker);
+    line-height: var(--text-kicker--line-height);
+    letter-spacing: var(--text-kicker--letter-spacing);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* One transition length for the whole product, and none of it if you asked for none. */
+  .transition-ui {
+    transition-property: color, background-color, border-color, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Club-authored event descriptions. Narrow allowlist on the server and again in
+   the browser, so the only styling needed here is readable body copy.
+   --------------------------------------------------------------------------- */
+@layer components {
+  .prose-notice {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .prose-notice > * + * {
+    margin-top: 0.85em;
+  }
+  .prose-notice h2,
+  .prose-notice h3,
+  .prose-notice h4 {
+    font-family: var(--font-serif);
+    font-size: 1.05em;
+    margin-top: 1.5em;
+  }
+  .prose-notice ul,
+  .prose-notice ol {
+    padding-left: 1.25rem;
+  }
+  .prose-notice ul {
+    list-style: disc;
+  }
+  .prose-notice ol {
+    list-style: decimal;
+  }
+  .prose-notice li + li {
+    margin-top: 0.3em;
+  }
+  .prose-notice a {
+    color: var(--color-brick);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-notice code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-wash);
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+  }
+  .prose-notice pre {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-wash);
+    padding: 0.75rem;
+    border-radius: 2px;
+    overflow-x: auto;
+  }
+  .prose-notice blockquote {
+    border-left: 2px solid var(--color-line-strong);
+    padding-left: 0.85rem;
+    color: var(--color-muted);
+  }
+  .prose-notice hr {
+    border: 0;
+    border-top: 1px solid var(--color-line);
+  }
+}
